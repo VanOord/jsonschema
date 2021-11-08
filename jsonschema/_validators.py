@@ -1,7 +1,7 @@
 from fractions import Fraction
 from urllib.parse import urldefrag, urljoin
 import re
-
+from sys import float_info
 from jsonschema._utils import (
     ensure_list,
     equal,
