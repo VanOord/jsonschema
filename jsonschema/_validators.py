@@ -1,7 +1,7 @@
 from fractions import Fraction
 from urllib.parse import urldefrag, urljoin
 import re
-from sys import float_info
+from decimal import Decimal
 from jsonschema._utils import (
     ensure_list,
     equal,
@@ -186,16 +186,11 @@ def multipleOf(validator, dB, instance, schema):
         quotient = instance / dB
         try:
             failed = int(quotient) != quotient
-            if failed and dB != int(dB):
+            if failed and dB != int(dB) and isinstance(dB, float) and isinstance(instance, float):
                 # Checking if floats are integer multiples of non integer
-                # floats is asking for floating point errors. Use a more
-                # lenient validation that probably conforms to the users
-                # expectations where 101 * 0.1 == 10.1 would be true.
-                # This also conforms to behaviour in javascript jsonschema
-                # checkers
-                remainder = instance % dB
-                tolerance = float_info.epsilon * instance
-                failed = remainder > tolerance and dB - remainder > tolerance
+                # floats is asking for floating point errors. 
+                quotient = Decimal(str(instance)) / Decimal(str(dB))
+                failed = int(quotient) != quotient
         except OverflowError:
             # When `instance` is large and `dB` is less than one,
             # quotient can overflow to infinity; and then casting to int
