@@ -1,4 +1,11 @@
 ==========
+fork
+==========
+
+This ia a fork of jsonschema whith more lenient multipleOf validation: `10.1` is a multiple of `0.1`, due to https://github.com/Julian/jsonschema/pull/878.
+This is solved by converting both instance and multipleOf to `Decimal` types
+
+==========
 jsonschema
 ==========
 
